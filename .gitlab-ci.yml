@@ -27,7 +27,7 @@ run_pytest:
 build:
   stage: build
   variables:
-    IMAGE_TAG: newmath_$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/newmath_$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   script:
     - whoami
     - echo $PATH
