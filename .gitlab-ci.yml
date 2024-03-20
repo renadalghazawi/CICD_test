@@ -31,7 +31,6 @@ build:
   script:
     - whoami
     - echo $PATH
-    - cd ./python_application
     - podman build -t $IMAGE_TAG . 
     - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker push $IMAGE_TAG
