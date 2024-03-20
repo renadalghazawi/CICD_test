@@ -1,0 +1,40 @@
+stages:
+  - pytest
+  - build
+  - test
+
+variables:
+  GIT_STRATEGY: clone
+
+before_script:
+  - set -x # Debug/interpretation mode.
+  - whoami # Who's running the CI?
+  - env    # spits out all environment variables (including CI)
+  - ls     # shows the current directory contents for debugging.
+
+
+
+run_pytest:
+  stage: pytest
+  script:
+    - python3 -m pytest -v --junitxml=report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+
+
+build:
+  stage: build
+  variables:
+    IMAGE_TAG: newmath_$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  script:
+    - whoami
+    - echo $PATH
+    - cd ./python_application
+    - podman build -t $IMAGE_TAG . 
+    - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker push $IMAGE_TAG
+  only:
+    - master
+
