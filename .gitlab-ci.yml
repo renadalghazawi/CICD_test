@@ -5,6 +5,8 @@ stages:
 
 variables:
   GIT_STRATEGY: clone
+  VERSION_NUMBER: "1.0.0"
+  CONTAINER_NAME: "newmath"
 
 before_script:
   - set -x # Debug/interpretation mode.
@@ -27,7 +29,7 @@ run_pytest:
 build:
   stage: build
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/newmath_$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:${VERSION_NUMBER}
   script:
     - whoami
     - echo $PATH
