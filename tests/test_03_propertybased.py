@@ -2,7 +2,6 @@ from newmath.add import add
 from newmath.mul import mul
 
 
-
 def assert_mul_unit(A):
   assert mul(A,1) == A, "MultiplyUnit failed for number: {}".format(A)
 

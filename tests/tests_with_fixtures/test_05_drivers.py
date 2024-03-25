@@ -1,18 +1,20 @@
 
 
 
+def assert_mul_unit(A):
+  assert mul(A,1) == A, "MultiplyUnit failed for number: {}".format(A)
+
+def Test_Driver_Unary(test_name,test_function,input):
+  count=0
+  total_cases=len(input)
+  for num in input:
+    test_function(num)
+    count=count+1
+  print("{} verified with {} tests among {} numbers".format(test_name,count,total_cases))
 
 
+Test_Driver_Unary("MultiplyOne",assert_mul_unit,number_list)
 
-
-# @pytest.mark.parametrize("test_name", ["100", "101", "102"])
-# def Test_Driver_Unary(test_name,test_function,input):
-#   count=0
-#   total_cases=len(input)
-#   for num in input:
-#     test_function(num)
-#     count=count+1
-#   print("{} verified with {} tests among {} numbers".format(test_name,count,total_cases))
 
 # def Test_Driver_Binary(test_name,test_function,inputA,inputB):
 #   count=0
