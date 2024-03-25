@@ -1,17 +1,12 @@
+# README
 
+This repo showcases the process of making a package into a containerized tool, as well as testing that tool before containerization. 
 
-
-
-
-
-
-
-
-
-
-Showcases the process of making a package into a containerized tool, as well as testing that tool before containerization. 
-
-``cd to python_scripts``
+~~~
+#You will need to create a python3 environment that contains pytest.
+# On BioHPC, this can be done with
+module add python/3.10.x-anaconda
+~~~
 
 # Basic CI/CD Concepts - Part 1
 
@@ -168,14 +163,22 @@ A runner must first be registered to a group or project - this makes it availabl
 The runner must then be started - usually by a command like `gitlab-runner run` .
 
 
-
-
-
 # EXERCISES
 
 For any of these exercises, feel free to substitute in your own code and modify the existing code to fit. 
 
 You should be able to run your tests using `pytest` in the base directory of this repository. 
+
+~~~
+# Explicitly running pytest as a python3 module:
+python3 -m pytest
+
+# More verbose output, individual tests:
+python3 -m pytest -v
+
+# Same verbosity, outputs a report of test statuses. 
+python3 -m pytest -v --junitxml=report.xml
+~~~
 
 
 # Exercise A: Corner and Edge Cases
@@ -293,6 +296,7 @@ def generate_random_numbers(N, A, B, seed=None):
         random.seed(seed)
     return [random.randint(A, B) for _ in range(N)]
 ~~~
+
 ### Exercise B elements:
 
 1. Using the code skeleton in `test_03_propertybased.py`, write driver code which uses the `generate_random_numbers` function to create two test datasets: One which is truly random (`randseed=None`), and the other which uses a seed you specify to control the randomness of that test array.
@@ -322,23 +326,47 @@ You may have noticed a great deal of similar code in the property-based tests, m
 
 Using the commented-out code in `test_05_drivers.py`, write a modified form of the property-based tests which uses the driver code to iterate over a list of different tests and their arguments to provide the same test functionality.
 
-The case for the additive identity (A+0=A) is included for you. 
-
-
-
-
+The case for the multiplicative identity (A*1=A) is included for you. 
 
 
 # CI/CD exercises
 
-When you have completed the test exercises to your satisfaction, you should try to automate the tests. You can skip to this step directly, and the code should work as expected.
+When you have completed the test exercises to your satisfaction, you should explore automating the tests. You can skip to this step directly, and the code should work as expected.
 
-## Exercise A: Testing your code with Bash.
+## Exercise E: Testing your code and container with Bash.
 
 If you are writing code that is meant to function as an application, you will often want to test it 'externally' by calling it. Internal package tests like pytest can be very helpful, but the packaging process can cause some interesting side effects that are hard to detect.
 
-To accomplish this, check out the 
+Test this code by issuing the command `python3 main.py 2 4`. It should output the correct sum and product of the two numbers entered:
 
+~~~
+#> python3 main.py 2 4
+The sum of 2 and 4 is: 6
+The mul of 2 and 4 is: 8
+~~~
+
+* Write a short Bash script to test some inputs and outputs for the code. 
+* Build the container for this package by running `podman build . -t local_newmath`
+* Test that the resulting container provides the same outputs for the same inputs as the Bash script.
+
+~~~
+#> podman run local_newmath 2 4
+The sum of 2 and 4 is: 6
+The mul of 2 and 4 is: 8
+~~~
+
+By testing your code and container externally, you can re-use the same tests.
+
+## Exercise F: 
+
+By this point, you should have already tested with pytest, with Bash calling Python, and with Bash calling the container.
+
+You can now automate your tests using the `.gitlab-ci.yml` file provided herein. 
+
+
+~~~
+Set up the container
+~~~
 
 ##
 

@@ -1,10 +1,11 @@
 
-
+from newmath.add import add
+from newmath.mul import mul
 
 def assert_mul_unit(A):
   assert mul(A,1) == A, "MultiplyUnit failed for number: {}".format(A)
 
-def Test_Driver_Unary(test_name,test_function,input):
+def Drive_Test_Unary(test_name,test_function,input):
   count=0
   total_cases=len(input)
   for num in input:
@@ -12,8 +13,8 @@ def Test_Driver_Unary(test_name,test_function,input):
     count=count+1
   print("{} verified with {} tests among {} numbers".format(test_name,count,total_cases))
 
-
-Test_Driver_Unary("MultiplyOne",assert_mul_unit,number_list)
+def test_mul_unit(number_list):
+  Drive_Test_Unary("MultiplyOne",assert_mul_unit,number_list)
 
 
 # def Test_Driver_Binary(test_name,test_function,inputA,inputB):
