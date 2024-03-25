@@ -3,7 +3,7 @@
 This repo showcases the process of making a package into a containerized tool, as well as testing that tool before containerization. 
 
 ~~~
-#You will need to create a python3 environment that contains pytest.
+# You will need to create a python3 environment that contains pytest to run these manually.
 # On BioHPC, this can be done with
 module add python/3.10.x-anaconda
 ~~~
@@ -361,98 +361,17 @@ By testing your code and container externally, you can re-use the same tests.
 
 By this point, you should have already tested with pytest, with Bash calling Python, and with Bash calling the container.
 
-You can now automate your tests using the `.gitlab-ci.yml` file provided herein. 
+You can now automate your tests using the `.gitlab-ci.yml` file provided herein. If you have a runner configured for your project, you can trigger a pipeline or push a commit to your repository, and it will trigger the runner to run the pipeline specified in `.gitlab-ci.yml`.
 
+This pipeline is composed of several stages, only some of which have jobs:
+1. `pytest` runs the unit tests on the package. If these succeed, the build test will proceed.
+2. `bash-test` runs the unit tests on the package. If these succeed, the build test will proceed.
+3. `build` builds the container image, copying the package in and pushing a new test version of it to the registry.
+4. `container-test` is intended for you to fill out with further testing of your container.
+5. `publish` is intended for you to push your test container with a final version tag.
 
-~~~
-Set up the container
-~~~
+Once the pipeline has been run, you should have a container uploaded to your project's registry. 
 
-##
-
-
- Set our parameters for this test.
-
-lowbound=0
-hibound=10
-N=10
-randseed=69105
-
-num_list = generate_random_numbers(N, lowbound, hibound, seed=randseed)
-
-test_mul_unit(num_list)
-test_mul_zero(num_list)
-test_add_unit(num_list)
-test_add_zero(num_list)
-
-test_add_comm(num_list)
-test_mul_comm(num_list)
-test_left_dist(num_list)
-test_right_dist(num_list)
-
-~~~
-
-In this case, the `randseed` variable is set to control how the random number generation process takes place. This helps to remove randomness from your testing process, but it can be a good idea to have a truly random test as well. For simplicity, we'll create a function to wrap all of those individual tests:
-
-~~~
-def run_test_battery(number_list):
-  test_mul_unit(num_list)
-  test_mul_zero(num_list)
-  test_add_unit(num_list)
-  test_add_zero(num_list)
-  test_add_comm(num_list)
-  test_mul_comm(num_list)
-  test_left_dist(num_list)
-  test_right_dist(num_list)
-
-num_list_truerandom = generate_random_numbers(N, lowbound, hibound, seed=None)
-num_list = generate_random_numbers(N, lowbound, hibound, seed=randseed)
-
-run_test_battery(num_list_truerandom)
-run_test_battery(num_list)
-
-~~~
-
-You may have noticed quite a bit of repeated code in the previous section - this is usually to be avoided. To get around this, we will create a test driver:
-
-~~~ 
-
-def Test_Driver_Unary(test_name,test_function,input):
-  count=0
-  total_cases=len(input)
-  for num in input:
-    test_function(num)
-    count=count+1
-  print("{} verified with {} tests among {} numbers".format(test_name,count,total_cases))
-
-def Test_Driver_Binary(test_name,test_function,inputA,inputB):
-  count=0
-  total_cases=len(inputA)*len(inputB)
-  for numA in inputA:
-    for numB in inputB:
-      test_function(numA,numB)
-      count=count+1
-  print("{} verified with {} tests among {} numbers".format(test_name,count,total_cases))
-
-def Test_Driver_Ternary(test_name,test_function,inputA,inputB,inputC):
-  count=0
-  total_cases=len(inputA)*len(inputB)*len(inputC)
-  for numA in inputA:
-    for numB in inputB:
-      for numC in inputC:
-        test_function(numA,numB,numC)
-        count=count+1
-  print("{} verified with {} tests among {} numbers".format(test_name,count,total_cases))
-
-Test_Driver_Unary("MultiplyOne",assert_mul_unit,num_list)
-Test_Driver_Unary("MultiplyZero",assert_mul_zero,num_list)
-Test_Driver_Unary("AddOneBigger",assert_add_unit,num_list)
-Test_Driver_Unary("AddZeroSame",assert_add_zero,num_list)
-
-Test_Driver_Binary("CommAdd",is_add_comm,num_list,num_list)
-Test_Driver_Binary("CommMul",is_mul_comm,num_list,num_list)
-
-Test_Driver_Ternary("IsLeftDist",is_left_dist,num_list,num_list,num_list)
-Test_Driver_Ternary("IsRightDist",is_right_dist,num_list,num_list,num_list)
-
-~~~
+Using the framework provided...
+* Populate the `bash-test` stage so that it runs the Bash tests from Exercise E.
+* Populate the `container-test` stage so that it runs the container tests from Exercise E. 

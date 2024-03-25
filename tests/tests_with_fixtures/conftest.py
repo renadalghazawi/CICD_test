@@ -29,7 +29,6 @@ def seed_rand_numlist():
 def seed_69105_numlist():
     return fixture_generate_random_numbers(10, 0, 10, seed=69105)
 
-    
 
 @pytest.fixture(autouse=True)
 def number_list():
