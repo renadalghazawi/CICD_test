@@ -22,6 +22,7 @@ before_script:
 run_pytest:
   stage: pytest
   script:
+    - module add python/3.10.x-anaconda
     - python3 -m pytest -v --junitxml=report.xml # Output junit report for viewing in GitLab.
   artifacts:
     when: always
