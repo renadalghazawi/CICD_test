@@ -42,7 +42,7 @@ build:
   script:
     - podman build -t $IMAGE_TEST_TAG . 
     - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - /usr/bin/podman push $IMAGE_TEST_TAG
+    - podman push $IMAGE_TEST_TAG
   only:
     - master
 
@@ -66,7 +66,7 @@ publish-container:
   script:
     - podman pull ${IMAGE_TEST_TAG}
     - podman tag ${IMAGE_TEST_TAG} ${IMAGE_TAG}
-    - /usr/bin/podman push $IMAGE_TAG
+    - podman push $IMAGE_TAG
   only:
     - master
 
