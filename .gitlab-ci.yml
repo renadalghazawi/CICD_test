@@ -64,6 +64,7 @@ publish-container:
     IMAGE_TEST_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:test_${VERSION_NUMBER}
     IMAGE_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:${VERSION_NUMBER}
   script:
+    - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - podman pull ${IMAGE_TEST_TAG}
     - podman tag ${IMAGE_TEST_TAG} ${IMAGE_TAG}
     - /usr/bin/podman push $IMAGE_TAG
