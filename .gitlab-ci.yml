@@ -13,7 +13,7 @@ variables:
 before_script:
   - whoami # Who's running the CI?
   - env    # spits out all environment variables (including CI)
-  - ll     # shows the current directory contents for debugging.
+  - ls     # shows the current directory contents for debugging.
 
 
 # Here, we're running a stage to verify that the package is good before we try to build.
