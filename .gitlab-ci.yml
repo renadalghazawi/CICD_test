@@ -47,26 +47,26 @@ build:
     - master
 
 
-# verify-container:
-#   stage: container-test
-#   variables:
-#     IMAGE_TEST_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:test_${VERSION_NUMBER}
-#   script:
-#     - podman pull $IMAGE_TEST_TAG . 
-#     - 
-#   only:
-#     - master
+verify-container:
+  stage: container-test
+  variables:
+    IMAGE_TEST_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:test_${VERSION_NUMBER}
+  script:
+    - podman pull $IMAGE_TEST_TAG . 
+    - podman run $IMAGE_TEST_TAG 2 4
+  only:
+    - master
 
     
-# publish-container:
-#   stage: publish
-#   variables:
-#     IMAGE_TEST_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:test_${VERSION_NUMBER}
-#     IMAGE_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:${VERSION_NUMBER}
-#   script:
-#     - podman pull ${IMAGE_TEST_TAG}
-#     - podman tag ${IMAGE_TEST_TAG} ${IMAGE_TAG}
-#     - /usr/bin/podman push $IMAGE_TAG
-#   only:
-#     - master
+publish-container:
+  stage: publish
+  variables:
+    IMAGE_TEST_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:test_${VERSION_NUMBER}
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/${CONTAINER_NAME}:${VERSION_NUMBER}
+  script:
+    - podman pull ${IMAGE_TEST_TAG}
+    - podman tag ${IMAGE_TEST_TAG} ${IMAGE_TAG}
+    - /usr/bin/podman push $IMAGE_TAG
+  only:
+    - master
 
